@@ -1,0 +1,66 @@
+import { ArrowRight, Shield } from "lucide-react";
+import heroBg from "@/assets/hero-bg.jpg";
+
+interface HeroProps {
+  onExplore: () => void;
+}
+
+const Hero = ({ onExplore }: HeroProps) => {
+  return (
+    <section className="relative min-h-[600px] flex items-center overflow-hidden">
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/60 to-foreground/30" />
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10 py-24">
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-2 mb-6">
+            <Shield className="w-5 h-5 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              Transparencia On-Chain Verificable
+            </span>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-card">
+            Financiación Transparente para Causas Globales
+          </h1>
+
+          <p className="text-lg md:text-xl mb-8 text-card/80 leading-relaxed max-w-xl">
+            Dona criptoactivos con la certeza de que cada céntimo llega a su destino gracias a la trazabilidad on-chain.
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={onExplore}
+              className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-8 py-3.5 text-base font-semibold hover:opacity-90 transition-opacity duration-150"
+            >
+              Explorar Proyectos
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button className="flex items-center gap-2 bg-card/10 text-card border border-card/20 rounded-full px-8 py-3.5 text-base font-semibold hover:bg-card/20 transition-colors duration-150 backdrop-blur-sm">
+              Crear una Causa
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div className="flex gap-8 mt-12">
+            {[
+              { value: "$3.2M", label: "Fondos Recaudados" },
+              { value: "2,847", label: "Donantes Activos" },
+              { value: "98.7%", label: "Trazabilidad" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl font-bold text-card">{stat.value}</div>
+                <div className="text-sm text-card/60">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
