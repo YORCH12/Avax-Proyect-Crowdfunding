@@ -64,7 +64,7 @@ const Index = () => {
       <footer className="bg-card border-t border-border py-10">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm text-muted-foreground">
-            © 2026 ImpactSphere. Financiación transparente basada en blockchain.
+            © 2026 ImpactSphere. Ayuda sísmica CDMX con transparencia blockchain.
           </p>
         </div>
       </footer>
