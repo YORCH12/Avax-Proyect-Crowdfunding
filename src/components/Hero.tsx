@@ -24,11 +24,11 @@ const Hero = ({ onExplore }: HeroProps) => {
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-card">
-            Financiación Transparente para Causas Globales
+            Ayuda Transparente para los Terremotos de CDMX
           </h1>
 
           <p className="text-lg md:text-xl mb-8 text-card/80 leading-relaxed max-w-xl">
-            Dona criptoactivos con la certeza de que cada céntimo llega a su destino gracias a la trazabilidad on-chain.
+            Dona criptoactivos para el rescate, refugio y reconstrucción tras los sismos en la Ciudad de México. Cada peso es rastreable on-chain.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -36,19 +36,19 @@ const Hero = ({ onExplore }: HeroProps) => {
               onClick={onExplore}
               className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-8 py-3.5 text-base font-semibold hover:opacity-90 transition-opacity duration-150"
             >
-              Explorar Proyectos
+              Ver Campañas de Ayuda
               <ArrowRight className="w-4 h-4" />
             </button>
             <button className="flex items-center gap-2 bg-card/10 text-card border border-card/20 rounded-full px-8 py-3.5 text-base font-semibold hover:bg-card/20 transition-colors duration-150 backdrop-blur-sm">
-              Crear una Causa
+              Reportar Zona Afectada
             </button>
           </div>
 
           {/* Stats */}
           <div className="flex gap-8 mt-12">
             {[
-              { value: "$3.2M", label: "Fondos Recaudados" },
-              { value: "2,847", label: "Donantes Activos" },
+              { value: "$1.8M", label: "Fondos Recaudados" },
+              { value: "7,234", label: "Donantes Activos" },
               { value: "98.7%", label: "Trazabilidad" },
             ].map((stat) => (
               <div key={stat.label}>
