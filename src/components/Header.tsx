@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Search, Wallet, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useConnect, useConnectors, useConnection, useDisconnect } from "wagmi";
 
 const Header = () => {
-  const [connected, setConnected] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const { address, isConnected } = useConnection();
+  const { disconnect } = useDisconnect();
+  const connectors = useConnectors();
+  const { connect } = useConnect();
+
+  const firstConnector = connectors[0];
+  const shortAddress = useMemo(() => {
+    if (!address) return "";
+    if (address.length < 12) return address;
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  }, [address]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-header">
@@ -33,20 +44,24 @@ const Header = () => {
         </div>
 
         {/* Wallet */}
-        {connected ? (
+        {isConnected ? (
           <button
-            onClick={() => setConnected(false)}
+            onClick={() => disconnect()}
             className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-4 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
           >
             <div className="w-2 h-2 rounded-full bg-primary" />
-            <span>0x8a4f...c2d1</span>
+            <span>{shortAddress}</span>
             <span className="text-muted-foreground">|</span>
             <span className="text-primary font-semibold">1,250 USDC</span>
             <ChevronDown className="w-3 h-3 text-muted-foreground" />
           </button>
         ) : (
           <button
-            onClick={() => setConnected(true)}
+            onClick={() => {
+              if (!firstConnector) return;
+              connect({ connector: firstConnector });
+            }}
+            disabled={!firstConnector}
             className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity duration-150"
           >
             <Wallet className="w-4 h-4" />
