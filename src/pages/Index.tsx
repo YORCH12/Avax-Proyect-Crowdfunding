@@ -41,9 +41,9 @@ const Index = () => {
         <section ref={gridRef} className="py-16">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-3">Causas Destacadas</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-3">Campañas de Ayuda Activas</h2>
               <p className="text-muted-foreground max-w-lg mx-auto">
-                Cada proyecto cuenta con verificación on-chain y trazabilidad completa de fondos.
+                Cada campaña cuenta con verificación on-chain y trazabilidad completa de los fondos donados.
               </p>
             </div>
 
