@@ -3,6 +3,7 @@ import { Search, Wallet, ChevronDown, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useConnect, useConnectors, useConnection, useDisconnect } from "wagmi";
 import SignupModal from "@/components/SignupModal";
+import WalletModal from "@/components/WalletModal";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,6 +12,7 @@ const Header = () => {
   const connectors = useConnectors();
   const { connect } = useConnect();
   const [signupOpen, setSignupOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
 
   const firstConnector = connectors[0];
@@ -69,7 +71,7 @@ const Header = () => {
             {/* Wallet */}
             {isConnected ? (
               <button
-                onClick={() => disconnect()}
+                onClick={() => setWalletModalOpen(true)}
                 className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-4 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
               >
                 <div className="w-2 h-2 rounded-full bg-primary" />
@@ -100,6 +102,14 @@ const Header = () => {
         open={signupOpen}
         onOpenChange={setSignupOpen}
         onLogin={(name) => setUserName(name)}
+      />
+
+      <WalletModal
+        open={walletModalOpen}
+        onOpenChange={setWalletModalOpen}
+        address={address ?? ""}
+        shortAddress={shortAddress}
+        onDisconnect={() => disconnect()}
       />
     </>
   );
