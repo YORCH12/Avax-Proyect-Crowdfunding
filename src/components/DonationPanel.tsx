@@ -69,6 +69,7 @@ const DonationPanel = ({ project }: DonationPanelProps) => {
       args: [],
       value: parseEther(amount),
       account: address,
+      chain: fujiChain,
     });
   };
 
