@@ -1,15 +1,17 @@
 import { useMemo, useState } from "react";
-import { Search, Wallet, ChevronDown } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Search, Wallet, ChevronDown, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useConnect, useConnectors, useConnection, useDisconnect } from "wagmi";
+import SignupModal from "@/components/SignupModal";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
   const { address, isConnected } = useConnection();
   const { disconnect } = useDisconnect();
   const connectors = useConnectors();
   const { connect } = useConnect();
+  const [signupOpen, setSignupOpen] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
 
   const firstConnector = connectors[0];
   const shortAddress = useMemo(() => {
@@ -19,57 +21,87 @@ const Header = () => {
   }, [address]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-header">
-      <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">IS</span>
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 glass-header">
+        <div className="container mx-auto flex items-center justify-between h-16 px-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">IS</span>
+            </div>
+            <span className="font-semibold text-lg text-foreground tracking-tight">
+              ImpactSphere
+            </span>
+          </Link>
+
+          {/* Search */}
+          <div className="hidden md:flex items-center bg-secondary rounded-full px-4 py-2 w-full max-w-md mx-8">
+            <Search className="w-4 h-4 text-muted-foreground mr-2 shrink-0" />
+            <input
+              type="text"
+              placeholder="Buscar proyectos, organizaciones..."
+              className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-          <span className="font-semibold text-lg text-foreground tracking-tight">
-            ImpactSphere
-          </span>
-        </Link>
 
-        {/* Search */}
-        <div className="hidden md:flex items-center bg-secondary rounded-full px-4 py-2 w-full max-w-md mx-8">
-          <Search className="w-4 h-4 text-muted-foreground mr-2 shrink-0" />
-          <input
-            type="text"
-            placeholder="Buscar proyectos, organizaciones..."
-            className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+            {/* Profile button */}
+            {userName ? (
+              <button className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-3 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150">
+                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+                  <User className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <span className="hidden sm:inline">{userName}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setSignupOpen(true)}
+                className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-3 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
+              >
+                <User className="w-4 h-4 text-muted-foreground" />
+                <span className="hidden sm:inline">Perfil</span>
+              </button>
+            )}
+
+            {/* Wallet */}
+            {isConnected ? (
+              <button
+                onClick={() => disconnect()}
+                className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-4 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
+              >
+                <div className="w-2 h-2 rounded-full bg-primary" />
+                <span>{shortAddress}</span>
+                <span className="text-muted-foreground">|</span>
+                <span className="text-primary font-semibold">1,250 USDC</span>
+                <ChevronDown className="w-3 h-3 text-muted-foreground" />
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (!firstConnector) return;
+                  connect({ connector: firstConnector });
+                }}
+                disabled={!firstConnector}
+                className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity duration-150"
+              >
+                <Wallet className="w-4 h-4" />
+                <span className="hidden sm:inline">Conectar Billetera</span>
+                <span className="sm:hidden">Wallet</span>
+              </button>
+            )}
+          </div>
         </div>
+      </header>
 
-        {/* Wallet */}
-        {isConnected ? (
-          <button
-            onClick={() => disconnect()}
-            className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-4 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
-          >
-            <div className="w-2 h-2 rounded-full bg-primary" />
-            <span>{shortAddress}</span>
-            <span className="text-muted-foreground">|</span>
-            <span className="text-primary font-semibold">1,250 USDC</span>
-            <ChevronDown className="w-3 h-3 text-muted-foreground" />
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              if (!firstConnector) return;
-              connect({ connector: firstConnector });
-            }}
-            disabled={!firstConnector}
-            className="flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity duration-150"
-          >
-            <Wallet className="w-4 h-4" />
-            Conectar Billetera
-          </button>
-        )}
-      </div>
-    </header>
+      <SignupModal
+        open={signupOpen}
+        onOpenChange={setSignupOpen}
+        onLogin={(name) => setUserName(name)}
+      />
+    </>
   );
 };
 
