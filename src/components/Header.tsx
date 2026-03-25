@@ -71,7 +71,7 @@ const Header = () => {
             {/* Wallet */}
             {isConnected ? (
               <button
-                onClick={() => disconnect()}
+                onClick={() => setWalletModalOpen(true)}
                 className="flex items-center gap-2 bg-secondary text-secondary-foreground rounded-full px-4 py-2 text-sm font-medium hover:bg-muted transition-colors duration-150"
               >
                 <div className="w-2 h-2 rounded-full bg-primary" />
