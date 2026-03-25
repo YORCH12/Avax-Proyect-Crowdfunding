@@ -103,6 +103,14 @@ const Header = () => {
         onOpenChange={setSignupOpen}
         onLogin={(name) => setUserName(name)}
       />
+
+      <WalletModal
+        open={walletModalOpen}
+        onOpenChange={setWalletModalOpen}
+        address={address ?? ""}
+        shortAddress={shortAddress}
+        onDisconnect={() => disconnect()}
+      />
     </>
   );
 };
