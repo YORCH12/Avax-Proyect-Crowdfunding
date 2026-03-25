@@ -9,7 +9,7 @@ const RPC_URL =
 export const fujiChain: Chain = {
   id: 43113,
   name: "Avalanche Fuji",
-  network: "fuji",
+  
   nativeCurrency: { name: "AVAX", symbol: "AVAX", decimals: 18 },
   rpcUrls: {
     default: {
