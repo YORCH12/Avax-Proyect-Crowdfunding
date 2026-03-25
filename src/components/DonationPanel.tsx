@@ -67,6 +67,7 @@ const DonationPanel = ({ project }: DonationPanelProps) => {
       functionName: "donate",
       args: [],
       value: parseEther(amount),
+      account: address,
     });
   };
 
