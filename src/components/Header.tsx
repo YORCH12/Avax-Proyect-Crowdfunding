@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { Search, Wallet, ChevronDown, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useConnect, useConnectors, useConnection, useDisconnect } from "wagmi";
+import { useConnect, useConnectors, useConnection, useDisconnect, useBalance, useReadContract } from "wagmi";
+import { formatEther } from "viem";
 import SignupModal from "@/components/SignupModal";
 import WalletModal from "@/components/WalletModal";
+import { DONATIONBOX_ADDRESS, donationBoxAbi } from "@/blockchain/donationBox";
+import { fujiChain } from "@/blockchain/wagmiConfig";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,6 +24,43 @@ const Header = () => {
     if (address.length < 12) return address;
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   }, [address]);
+
+  // Real AVAX balance from the chain
+  const { data: balanceData } = useBalance({
+    address: address,
+    chainId: fujiChain.id,
+    query: {
+      enabled: !!address,
+    },
+  });
+
+  const formattedBalance = useMemo(() => {
+    if (!balanceData) return "0.00";
+    const val = parseFloat(balanceData.formatted);
+    return val.toFixed(4);
+  }, [balanceData]);
+
+  // Donor stats from the DonationBox contract
+  const { data: donorStatsData } = useReadContract({
+    address: DONATIONBOX_ADDRESS,
+    abi: donationBoxAbi,
+    functionName: "donorStats",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!DONATIONBOX_ADDRESS && !!address,
+    },
+  });
+
+  const donationCount = useMemo(() => {
+    if (!donorStatsData) return 0;
+    return Number(donorStatsData[1]);
+  }, [donorStatsData]);
+
+  const totalDonated = useMemo(() => {
+    if (!donorStatsData) return "0";
+    const val = parseFloat(formatEther(donorStatsData[0]));
+    return val.toFixed(4);
+  }, [donorStatsData]);
 
   return (
     <>
@@ -77,7 +117,7 @@ const Header = () => {
                 <div className="w-2 h-2 rounded-full bg-primary" />
                 <span>{shortAddress}</span>
                 <span className="text-muted-foreground">|</span>
-                <span className="text-primary font-semibold">1,250 USDC</span>
+                <span className="text-primary font-semibold">{formattedBalance} AVAX</span>
                 <ChevronDown className="w-3 h-3 text-muted-foreground" />
               </button>
             ) : (
@@ -110,6 +150,9 @@ const Header = () => {
         address={address ?? ""}
         shortAddress={shortAddress}
         onDisconnect={() => disconnect()}
+        balance={formattedBalance}
+        donationCount={donationCount}
+        totalDonated={totalDonated}
       />
     </>
   );
