@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useConnection, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import { DONATIONBOX_ADDRESS, donationBoxAbi } from "@/blockchain/donationBox";
+import { fujiChain } from "@/blockchain/wagmiConfig";
 
 interface DonationPanelProps {
   project: Project;
