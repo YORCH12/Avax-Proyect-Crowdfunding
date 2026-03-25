@@ -12,6 +12,7 @@ const Header = () => {
   const connectors = useConnectors();
   const { connect } = useConnect();
   const [signupOpen, setSignupOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
 
   const firstConnector = connectors[0];
