@@ -4,7 +4,7 @@ import { type Chain } from "viem";
 
 const RPC_URL =
   (import.meta.env.VITE_FUJI_RPC_URL as string | undefined) ||
-  "https://api.avax-testnet.xyz/ext/bc/C/rpc";
+  "https://api.avax-test.network/ext/bc/C/rpc";
 
 export const fujiChain: Chain = {
   id: 43113,
