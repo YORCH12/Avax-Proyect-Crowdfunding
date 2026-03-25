@@ -3,6 +3,7 @@ import { Search, Wallet, ChevronDown, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useConnect, useConnectors, useConnection, useDisconnect } from "wagmi";
 import SignupModal from "@/components/SignupModal";
+import WalletModal from "@/components/WalletModal";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
